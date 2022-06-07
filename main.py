@@ -11,6 +11,8 @@ from linebot.models import (
 )
 import os
 
+from selenium.webdriver.common.by import By
+
 from scrape import get_ranking
 
 app = Flask(__name__)
@@ -41,10 +43,15 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     # スクレイピング
-    result = get_ranking()
-    # line_bot_api.reply_message(event.reply_token, TextSendMessage(text=event.message.text))
-    line_bot_api.reply_message(event.reply_token, TextSendMessage(text=result))
+    item_list = get_ranking()
+    for item in item_list:
+        rank = item.find_element(by=By.CLASS_NAME, value="yjnSub_list_rankNum").text
+        headline = item.find_element(by=By.CLASS_NAME, value="yjnSub_list_headline").text
+        link = item.find_element(by=By.TAG_NAME, value="a").get_attribute("href")
+        print(f'{rank} ヘッドライン：{headline} {link}')
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=f'{rank} ヘッドライン：{headline} {link}'))
 
+    # line_bot_api.reply_message(event.reply_token, TextSendMessage(text=event.message.text))
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT"))
