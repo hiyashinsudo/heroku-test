@@ -11,9 +11,7 @@ from linebot.models import (
 )
 import os
 
-from selenium.webdriver.common.by import By
-
-from scrape import get_ranking
+from scrape import get_yahoonews_ranking, get_toyoukeizai_ranking
 
 app = Flask(__name__)
 
@@ -43,12 +41,17 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     # スクレイピング
-    print("yasu id: ", event.source.user_id)
+    print("user id: ", event.source.user_id)
     if event.message.text == "ヤフーニュース":
         print("ヤフーニュースモード")
-        item3_list = get_ranking()
+        item3_list = get_yahoonews_ranking()
         for rank, headline, link in zip(item3_list["rank_list"], item3_list["headline_list"], item3_list["link_list"]):
-            print(f'{rank} ヘッドライン：{headline} {link}')
+            messages = TextSendMessage(text=f'{rank}:{headline} \n {link}')
+            line_bot_api.push_message(to=event.source.user_id, messages=messages)
+    elif event.message.text == "東洋経済オンライン":
+        print("東洋経済オンライン")
+        item3_list = get_toyoukeizai_ranking()
+        for rank, headline, link in zip(item3_list["rank_list"], item3_list["headline_list"], item3_list["link_list"]):
             messages = TextSendMessage(text=f'{rank}:{headline} \n {link}')
             line_bot_api.push_message(to=event.source.user_id, messages=messages)
     else:
@@ -57,6 +60,7 @@ def handle_message(event):
         line_bot_api.push_message(to=event.source.user_id, messages=messages)
         # line_bot_api.reply_message(event.reply_token, TextSendMessage(text=event.message.text))
     # line_bot_api.reply_message(event.reply_token, TextSendMessage(text=event.message.text))
+
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT"))
