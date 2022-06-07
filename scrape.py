@@ -5,13 +5,11 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
-options = Options()
-options.add_argument('--headless')
-driver = webdriver.Chrome(options=options)
-
-
 # Y!トピックからランキングtop5を取ってくる
 def get_yahoonews_ranking():
+    options = Options()
+    options.add_argument('--headless')
+    driver = webdriver.Chrome(options=options)
     print("start get_ranking")
     driver.get('https://news.yahoo.co.jp/topics')
     driver.implicitly_wait(0.5)
@@ -32,7 +30,7 @@ def get_yahoonews_ranking():
     except NoSuchElementException as e:
         print("そんな要素ないぞ")
         print(e)
-    # driver.quit()
+    driver.quit()
     return {
         "rank_list": rank_list,
         "headline_list": headline_list,
@@ -42,6 +40,9 @@ def get_yahoonews_ranking():
 
 # 東洋経済オンラインからランキングtop5を取ってくる（1時間）
 def get_toyoukeizai_ranking():
+    options = Options()
+    options.add_argument('--headless')
+    driver = webdriver.Chrome(options=options)
     print(f'ジョブ開始日時：{datetime.datetime.now().strftime("%Y年%m月%d日%H:%M:%S")}')
     driver.get('https://toyokeizai.net/')
     driver.implicitly_wait(0.5)
@@ -62,7 +63,7 @@ def get_toyoukeizai_ranking():
     except NoSuchElementException as e:
         print("そんな要素ないぞ: ", e)
     print(f'ジョブ終了日時：{datetime.datetime.now().strftime("%Y年%m月%d日%H:%M:%S")}')
-    # driver.quit()
+    driver.quit()
     return {
         "rank_list": rank_list,
         "headline_list": headline_list,
