@@ -29,8 +29,9 @@ def get_ranking():
         print(link)
 
     driver.quit()
-
-    return news
+    print('news...')
+    print(news)
+    return ','.join(s for s in news)
 
 
 if __name__ == '__main__':
