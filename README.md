@@ -3,6 +3,10 @@
   - 「ヤフーニュース」：トップ5の記事をLINEに表示
   - 「東洋経済オンライン」：トップ5の記事をLINEに表示
 
+# 参考画像
+<!-- ![line](https://user-images.githubusercontent.com/34742328/172427140-3546a390-6ae4-4117-a302-4acbeafe6f07.jpg) -->
+<img src="https://user-images.githubusercontent.com/34742328/172427140-3546a390-6ae4-4117-a302-4acbeafe6f07.jpg"  width="320px">
+
 # 使い方
 - LINE Developers 登録とかやる
 - LINEの公式アカウントを作って、Messaging APIを使えるようにする。
