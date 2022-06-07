@@ -14,7 +14,8 @@ def get_ranking():
     yjnSub_list_item = []
     yjnSub_section_title = ""
     headline_list = []
-    news = []
+    rank_list = []
+    link_list = []
     print("ここまできた1")
     try:
         yjnSub_section = driver.find_element(by=By.CLASS_NAME, value="yjnSub_section")
@@ -25,7 +26,9 @@ def get_ranking():
             rank = item.find_element(by=By.CLASS_NAME, value="yjnSub_list_rankNum").text
             headline = item.find_element(by=By.CLASS_NAME, value="yjnSub_list_headline").text
             link = item.find_element(by=By.TAG_NAME, value="a").get_attribute("href")
+            rank_list.append(rank)
             headline_list.append(headline)
+            link_list.append(link)
             # line_bot_api.reply_message(event.reply_token, TextSendMessage(text=f'{rank} ヘッドライン：{headline} {link}'))
             print(f'{rank} ヘッドライン：{headline} {link}')
     except NoSuchElementException as e:
@@ -33,7 +36,11 @@ def get_ranking():
         print(e)
     print("ここまできた3")
     driver.quit()
-    return headline_list
+    return {
+        "rank_list": rank_list,
+        "headline_list": headline_list,
+        "link_list": link_list
+    }
 
 
 if __name__ == '__main__':

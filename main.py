@@ -43,17 +43,13 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     # スクレイピング
+    print("yasu id: ", event.source.user_id)
     if event.message.text == "ヤフーニュース":
         print("ヤフーニュースモード")
-        headline_list = get_ranking()
-        for headline in headline_list:
-            # rank = item.find_element(by=By.CLASS_NAME, value="yjnSub_list_rankNum").text
-            # headline = item.find_element(by=By.CLASS_NAME, value="yjnSub_list_headline").text
-            # link = item.find_element(by=By.TAG_NAME, value="a").get_attribute("href")
-            # line_bot_api.reply_message(event.reply_token, TextSendMessage(text=f'{rank} ヘッドライン：{headline} {link}'))
-            print("yasu id: ", event.source.user_id)
-            print(f'ヘッドライン：{headline}')
-            messages = TextSendMessage(text=f'ヘッドライン：{headline}')
+        item3_list = get_ranking()
+        for rank, headline, link in zip(item3_list["rank_list"], item3_list["headline_list"], item3_list["link_list"]):
+            print(f'{rank} ヘッドライン：{headline} {link}')
+            messages = TextSendMessage(text=f'{rank}:{headline} \n {link}')
             line_bot_api.push_message(to=event.source.user_id, messages=messages)
     else:
         print("テストモード")
