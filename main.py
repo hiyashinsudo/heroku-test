@@ -45,18 +45,21 @@ def handle_message(event):
     # スクレイピング
     if event.message.text == "ヤフーニュース":
         print("ヤフーニュースモード")
-        item_list = get_ranking()
-        for item in item_list:
-            rank = item.find_element(by=By.CLASS_NAME, value="yjnSub_list_rankNum").text
-            headline = item.find_element(by=By.CLASS_NAME, value="yjnSub_list_headline").text
-            link = item.find_element(by=By.TAG_NAME, value="a").get_attribute("href")
+        headline_list = get_ranking()
+        for headline in headline_list:
+            # rank = item.find_element(by=By.CLASS_NAME, value="yjnSub_list_rankNum").text
+            # headline = item.find_element(by=By.CLASS_NAME, value="yjnSub_list_headline").text
+            # link = item.find_element(by=By.TAG_NAME, value="a").get_attribute("href")
             # line_bot_api.reply_message(event.reply_token, TextSendMessage(text=f'{rank} ヘッドライン：{headline} {link}'))
-            print(f'{rank} ヘッドライン：{headline} {link}')
             print("yasu id: ", event.source.user_id)
-            messages = TextSendMessage(text=f'{rank} ヘッドライン：{headline} {link}')
+            print(f'ヘッドライン：{headline}')
+            messages = TextSendMessage(text=f'ヘッドライン：{headline}')
             line_bot_api.push_message(to=event.source.user_id, messages=messages)
     else:
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text=event.message.text))
+        print("テストモード")
+        messages = TextSendMessage(text='Test')
+        line_bot_api.push_message(to=event.source.user_id, messages=messages)
+        # line_bot_api.reply_message(event.reply_token, TextSendMessage(text=event.message.text))
     # line_bot_api.reply_message(event.reply_token, TextSendMessage(text=event.message.text))
 
 if __name__ == "__main__":
