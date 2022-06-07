@@ -32,7 +32,7 @@ def get_yahoonews_ranking():
     except NoSuchElementException as e:
         print("そんな要素ないぞ")
         print(e)
-    driver.quit()
+    # driver.quit()
     return {
         "rank_list": rank_list,
         "headline_list": headline_list,
@@ -62,7 +62,7 @@ def get_toyoukeizai_ranking():
     except NoSuchElementException as e:
         print("そんな要素ないぞ: ", e)
     print(f'ジョブ終了日時：{datetime.datetime.now().strftime("%Y年%m月%d日%H:%M:%S")}')
-    driver.quit()
+    # driver.quit()
     return {
         "rank_list": rank_list,
         "headline_list": headline_list,
