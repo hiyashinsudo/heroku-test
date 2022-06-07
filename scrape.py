@@ -5,6 +5,7 @@ from selenium.webdriver.common.by import By
 
 
 def get_ranking():
+    print("start get_ranking")
     options = Options()
     options.add_argument('--headless')
     driver = webdriver.Chrome(options=options)
@@ -13,13 +14,16 @@ def get_ranking():
     yjnSub_list_item = []
     yjnSub_section_title = ""
     news = []
+    print("ここまできた1")
     try:
         yjnSub_section = driver.find_element(by=By.CLASS_NAME, value="yjnSub_section")
         yjnSub_section_title = yjnSub_section.find_element(by=By.CLASS_NAME, value='yjnSub_section_title').text
         yjnSub_list_item = yjnSub_section.find_elements(by=By.CLASS_NAME, value='yjnSub_list_item')
+        print("ここまできた2")
     except NoSuchElementException as e:
         print("そんな要素ないぞ")
         print(e)
+    print("ここまできた3")
     driver.quit()
     return yjnSub_list_item
 
