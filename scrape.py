@@ -92,7 +92,8 @@ def get_gurume_ranking():
     # TODO: Selenium test
     try:
         for i in range(5):
-            top_a_tag = driver.find_element(by=By.XPATH, value=f"//*[@id='contents']/div/div[2]/div/ul/li[{i + 2}]/a")
+            # top_a_tag = driver.find_element(by=By.XPATH, value=f"//*[@id='contents']/div/div[2]/div/ul/li[{i + 2}]/a")
+            top_a_tag = driver.find_element(by=By.XPATH, value=f"/html/body/div[3]/div/div[2]/div/ul/li[{i + 2}]/a")
             link = top_a_tag.get_attribute("href")
             headline = top_a_tag.find_element(by=By.CLASS_NAME, value="related-title related-title-over").text
             print(f'{i + 1}：{headline} \n {link}')
@@ -103,6 +104,11 @@ def get_gurume_ranking():
 
     except NoSuchElementException as e:
         print("そんな要素ないぞ: ", e)
+        return None
+    except Exception as e:
+        print("エラー発生", e)
+        return None
+
     print(f'ジョブ終了日時：{datetime.datetime.now().strftime("%Y年%m月%d日%H:%M:%S")}')
     driver.quit()
     return {
