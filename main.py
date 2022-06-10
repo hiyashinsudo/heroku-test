@@ -11,7 +11,7 @@ from linebot.models import (
 )
 import os
 
-from scrape import get_yahoonews_ranking, get_toyoukeizai_ranking
+from scrape import *
 
 app = Flask(__name__)
 
@@ -38,30 +38,43 @@ def callback():
     return 'OK'
 
 
+def send_articles(article_dict: dict, event: MessageEvent):
+    for rank, headline, link in zip(article_dict["rank_list"], article_dict["headline_list"],
+                                    article_dict["link_list"]):
+        messages = TextSendMessage(text=f'{rank}:{headline} \n {link}')
+        line_bot_api.push_message(to=event.source.user_id, messages=messages)
+
+
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     # スクレイピング
     print("user id: ", event.source.user_id)
     if event.message.text == "ヤフーニュース":
         print("ヤフーニュースモード")
-        item3_list = get_yahoonews_ranking()
-        for rank, headline, link in zip(item3_list["rank_list"], item3_list["headline_list"], item3_list["link_list"]):
-            messages = TextSendMessage(text=f'{rank}:{headline} \n {link}')
-            line_bot_api.push_message(to=event.source.user_id, messages=messages)
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Yニュースからなだ、待っとけ"))
+        article_dict = get_yahoonews_ranking()
+        send_articles(article_dict=article_dict, event=event)
     elif event.message.text == "東洋経済オンライン":
-        print("東洋経済オンライン")
-        item3_list = get_toyoukeizai_ranking()
-        for rank, headline, link in zip(item3_list["rank_list"], item3_list["headline_list"], item3_list["link_list"]):
-            messages = TextSendMessage(text=f'{rank}:{headline} \n {link}')
-            line_bot_api.push_message(to=event.source.user_id, messages=messages)
+        print("東洋経済オンラインモード")
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="東オンからなだ、待っとけ"))
+        article_dict = get_toyoukeizai_ranking()
+        send_articles(article_dict=article_dict, event=event)
+    elif event.message.text == "NHK":
+        print("NHKモード")
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="NHKからなだ、待っとけ"))
+        article_dict = get_nhk_ranking()
+        send_articles(article_dict=article_dict, event=event)
+    elif event.message.text == "グルメ":
+        print("グルメモード")
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="グルメだな、待っとけ"))
+        article_dict = get_gurume_ranking()
+        send_articles(article_dict=article_dict, event=event)
     else:
         print("テストモード")
         messages = TextSendMessage(text='Test')
         line_bot_api.push_message(to=event.source.user_id, messages=messages)
         # line_bot_api.reply_message(event.reply_token, TextSendMessage(text=event.message.text))
-    # line_bot_api.reply_message(event.reply_token, TextSendMessage(text=event.message.text))
 
 
 if __name__ == "__main__":
-    port = int(os.getenv("PORT"))
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=int(os.getenv("PORT")))

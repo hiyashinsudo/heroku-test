@@ -5,6 +5,7 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
+
 # Y!トピックからランキングtop5を取ってくる
 def get_yahoonews_ranking():
     options = Options()
@@ -56,6 +57,46 @@ def get_toyoukeizai_ranking():
             link = gtm_hourly_rank_i.get_attribute("href")
             headline = gtm_hourly_rank_i.find_element(by=By.CLASS_NAME, value="title").text
             print(f'{i + 1}：{headline} \n {link}')
+            rank_list.append(i + 1)
+            headline_list.append(headline)
+            link_list.append(link)
+
+    except NoSuchElementException as e:
+        print("そんな要素ないぞ: ", e)
+    print(f'ジョブ終了日時：{datetime.datetime.now().strftime("%Y年%m月%d日%H:%M:%S")}')
+    driver.quit()
+    return {
+        "rank_list": rank_list,
+        "headline_list": headline_list,
+        "link_list": link_list
+    }
+
+
+# NHKニュースからランキングtop5を取ってくる（1時間）
+def get_nhk_ranking():
+    pass
+
+
+# グルメカテゴリを取ってくる（1時間）
+def get_gurume_ranking():
+    options = Options()
+    options.add_argument('--headless')
+    driver = webdriver.Chrome(options=options)
+    print(f'ジョブ開始日時：{datetime.datetime.now().strftime("%Y年%m月%d日%H:%M:%S")}')
+    driver.get('https://entabe.jp/news/sweets')
+    driver.implicitly_wait(0.5)
+    headline_list = []
+    rank_list = []
+    link_list = []
+    "//*[@id='contents']/div/div[2]/div/ul/li[3]/a"
+    # TODO: Selenium test
+    try:
+        for i in range(5):
+            top_a_tag = driver.find_element(by=By.XPATH, value=f"//*[@id='contents']/div/div[2]/div/ul/li[{i + 2}]/a")
+            link = top_a_tag.get_attribute("href")
+            headline = top_a_tag.find_element(by=By.CLASS_NAME, value="related-title related-title-over").text
+            print(f'{i + 1}：{headline} \n {link}')
+            # リストに追加
             rank_list.append(i + 1)
             headline_list.append(headline)
             link_list.append(link)
