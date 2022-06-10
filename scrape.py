@@ -5,11 +5,16 @@ from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 
+options = Options()
+options.add_argument('--headless')
+options.add_argument('--disable-gpu')  # 「暫定的なフラグ」らしい。。
+options.add_argument('--no-sandbox')  # セキュリティ対策などのchromeに搭載してある保護機能をオフにする。
+options.add_argument('--disable-dev-shm-usage')  # ディスクのメモリスペースを使う。
+options.add_argument('--remote-debugging-port=9222')  # リモートデバッグフラグを立てる。
+
 
 # Y!トピックからランキングtop5を取ってくる
 def get_yahoonews_ranking():
-    options = Options()
-    options.add_argument('--headless')
     driver = webdriver.Chrome(options=options)
     print("start get_ranking")
     driver.get('https://news.yahoo.co.jp/topics')
@@ -41,8 +46,6 @@ def get_yahoonews_ranking():
 
 # 東洋経済オンラインからランキングtop5を取ってくる（1時間）
 def get_toyoukeizai_ranking():
-    options = Options()
-    options.add_argument('--headless')
     driver = webdriver.Chrome(options=options)
     print(f'ジョブ開始日時：{datetime.datetime.now().strftime("%Y年%m月%d日%H:%M:%S")}')
     driver.get('https://toyokeizai.net/')
@@ -79,8 +82,6 @@ def get_nhk_ranking():
 
 # グルメカテゴリを取ってくる（1時間）
 def get_gurume_ranking():
-    options = Options()
-    options.add_argument('--headless')
     driver = webdriver.Chrome(options=options)
     print(f'ジョブ開始日時：{datetime.datetime.now().strftime("%Y年%m月%d日%H:%M:%S")}')
     driver.get('https://entabe.jp/news/sweets')
@@ -93,6 +94,8 @@ def get_gurume_ranking():
     try:
         for i in range(5):
             # top_a_tag = driver.find_element(by=By.XPATH, value=f"//*[@id='contents']/div/div[2]/div/ul/li[{i + 2}]/a")
+            nav = driver.find_element(by=By.CLASS_NAME, value="nav nav-pills nav-stacked")
+            print("nav: ,", nav)
             top_a_tag = driver.find_element(by=By.XPATH, value=f"/html/body/div[3]/div/div[2]/div/ul/li[{i + 2}]/a")
             link = top_a_tag.get_attribute("href")
             headline = top_a_tag.find_element(by=By.CLASS_NAME, value="related-title related-title-over").text
@@ -107,6 +110,8 @@ def get_gurume_ranking():
         return None
     except Exception as e:
         print("エラー発生", e)
+        nav4 = driver.find_element(by=By.CLASS_NAME, value="span4 nav1")
+        print("nav4: ,", nav4)
         return None
 
     print(f'ジョブ終了日時：{datetime.datetime.now().strftime("%Y年%m月%d日%H:%M:%S")}')

@@ -68,7 +68,7 @@ def handle_message(event):
         print("グルメモード")
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="グルメだな、待っとけ"))
         article_dict = get_gurume_ranking()
-        if not article_dict:
+        if article_dict:
             send_articles(article_dict=article_dict, event=event)
         else:
             line_bot_api.push_message(to=event.source.user_id, messages=TextSendMessage(text='ごめん失敗したわ'))
