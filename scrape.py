@@ -12,6 +12,9 @@ options.add_argument('--disable-gpu')  # 「暫定的なフラグ」らしい。
 options.add_argument('--no-sandbox')  # セキュリティ対策などのchromeに搭載してある保護機能をオフにする。
 options.add_argument('--disable-dev-shm-usage')  # ディスクのメモリスペースを使う。
 options.add_argument('--remote-debugging-port=9222')  # リモートデバッグフラグを立てる。
+# UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_4) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1 Safari/605.1.15'
+UA = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/102.0.0.0 Safari/537.36'
+options.add_argument('--user-agent=' + UA)
 
 
 # Y!トピックからランキングtop5を取ってくる
