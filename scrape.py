@@ -92,7 +92,10 @@ def get_nhk_ranking():
 # グルメカテゴリを取ってくる
 def get_gurume_ranking():
     # driver = webdriver.Chrome(options=options)
-    driver = webdriver.Firefox(options=options)
+    from selenium.webdriver.firefox.options import Options
+    fire_optionx = Options()
+    fire_optionx.add_argument('--headless')
+    driver = webdriver.Firefox(options=fire_optionx)
     print(f'ジョブ開始日時：{datetime.datetime.now().strftime("%Y年%m月%d日%H:%M:%S")}')
     driver.get('https://entabe.jp/news/sweets')
     driver.implicitly_wait(0.5)
