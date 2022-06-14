@@ -99,6 +99,8 @@ def get_gurume_ranking():
     rank_list = []
     link_list = []
     # TODO: Selenium test
+    test = driver.find_element(by=By.CLASS_NAME, value=f"side")
+    print(f'test: {test}')
     try:
         for i in range(5):
             top_a_tag = driver.find_element(by=By.XPATH, value=f"//*[@id=\"contents\"]/div/div[2]/div/ul/li[{i + 2}]/a")
