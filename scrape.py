@@ -101,12 +101,12 @@ def get_gurume_ranking():
     # driver = webdriver.Firefox(options=fire_optionx)
     print(f'ジョブ開始日時：{datetime.datetime.now().strftime("%Y年%m月%d日%H:%M:%S")}')
     driver.get('https://entabe.jp/news/sweets')
-    driver.implicitly_wait(3)
+    driver.implicitly_wait(0.5)
     headline_list = []
     rank_list = []
     link_list = []
     # TODO: Selenium test
-    print(f'driver source: {driver.page_source}')
+    # print(f'driver source: {driver.page_source}')
     try:
         for i in range(5):
             top_a_tag = driver.find_element(by=By.XPATH, value=f"//*[@id=\"contents\"]/div/div[2]/div/ul/li[{i + 2}]/a")
