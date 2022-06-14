@@ -53,17 +53,26 @@ def handle_message(event):
         print("ヤフーニュースモード")
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Yニュースからなだ、待っとけ"))
         article_dict = get_yahoonews_ranking()
-        send_articles(article_dict=article_dict, event=event)
+        if article_dict:
+            send_articles(article_dict=article_dict, event=event)
+        else:
+            line_bot_api.push_message(to=event.source.user_id, messages=TextSendMessage(text='なんかエラー出たわ'))
     elif event.message.text == "東洋経済オンライン":
         print("東洋経済オンラインモード")
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="東オンからなだ、待っとけ"))
         article_dict = get_toyoukeizai_ranking()
-        send_articles(article_dict=article_dict, event=event)
+        if article_dict:
+            send_articles(article_dict=article_dict, event=event)
+        else:
+            line_bot_api.push_message(to=event.source.user_id, messages=TextSendMessage(text='ソーリー'))
     elif event.message.text == "NHK":
         print("NHKモード")
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="NHKからなだ、待っとけ"))
         article_dict = get_nhk_ranking()
-        send_articles(article_dict=article_dict, event=event)
+        if article_dict:
+            send_articles(article_dict=article_dict, event=event)
+        else:
+            line_bot_api.push_message(to=event.source.user_id, messages=TextSendMessage(text='すまんうまくいかなかった'))
     elif event.message.text == "グルメ":
         print("グルメモード")
         line_bot_api.reply_message(event.reply_token, TextSendMessage(text="グルメだな、待っとけ"))

@@ -1,4 +1,5 @@
 import datetime
+import re
 
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
@@ -36,7 +37,12 @@ def get_yahoonews_ranking():
     except NoSuchElementException as e:
         print("そんな要素ないぞ")
         print(e)
+        return None
+    except Exception as e:
+        print("エラー発生", e)
+        return None
     driver.quit()
+    print(f'ジョブ終了日時：{datetime.datetime.now().strftime("%Y年%m月%d日%H:%M:%S")}')
     return {
         "rank_list": rank_list,
         "headline_list": headline_list,
@@ -66,8 +72,12 @@ def get_toyoukeizai_ranking():
 
     except NoSuchElementException as e:
         print("そんな要素ないぞ: ", e)
-    print(f'ジョブ終了日時：{datetime.datetime.now().strftime("%Y年%m月%d日%H:%M:%S")}')
+        return None
+    except Exception as e:
+        print("エラー発生", e)
+        return None
     driver.quit()
+    print(f'ジョブ終了日時：{datetime.datetime.now().strftime("%Y年%m月%d日%H:%M:%S")}')
     return {
         "rank_list": rank_list,
         "headline_list": headline_list,
@@ -79,8 +89,7 @@ def get_toyoukeizai_ranking():
 def get_nhk_ranking():
     pass
 
-
-# グルメカテゴリを取ってくる（1時間）
+# グルメカテゴリを取ってくる
 def get_gurume_ranking():
     driver = webdriver.Chrome(options=options)
     print(f'ジョブ開始日時：{datetime.datetime.now().strftime("%Y年%m月%d日%H:%M:%S")}')
@@ -89,16 +98,12 @@ def get_gurume_ranking():
     headline_list = []
     rank_list = []
     link_list = []
-    "//*[@id='contents']/div/div[2]/div/ul/li[3]/a"
     # TODO: Selenium test
     try:
         for i in range(5):
-            # top_a_tag = driver.find_element(by=By.XPATH, value=f"//*[@id='contents']/div/div[2]/div/ul/li[{i + 2}]/a")
-            nav = driver.find_element(by=By.CLASS_NAME, value="nav nav-pills nav-stacked")
-            print("nav: ,", nav)
-            top_a_tag = driver.find_element(by=By.XPATH, value=f"/html/body/div[3]/div/div[2]/div/ul/li[{i + 2}]/a")
+            top_a_tag = driver.find_element(by=By.XPATH, value=f"//*[@id=\"contents\"]/div/div[2]/div/ul/li[{i + 2}]/a")
             link = top_a_tag.get_attribute("href")
-            headline = top_a_tag.find_element(by=By.CLASS_NAME, value="related-title related-title-over").text
+            headline = re.sub('\n.*', '', top_a_tag.text[2:])
             print(f'{i + 1}：{headline} \n {link}')
             # リストに追加
             rank_list.append(i + 1)
@@ -110,12 +115,9 @@ def get_gurume_ranking():
         return None
     except Exception as e:
         print("エラー発生", e)
-        nav4 = driver.find_element(by=By.CLASS_NAME, value="span4 nav1")
-        print("nav4: ,", nav4)
         return None
-
-    print(f'ジョブ終了日時：{datetime.datetime.now().strftime("%Y年%m月%d日%H:%M:%S")}')
     driver.quit()
+    print(f'ジョブ終了日時：{datetime.datetime.now().strftime("%Y年%m月%d日%H:%M:%S")}')
     return {
         "rank_list": rank_list,
         "headline_list": headline_list,
