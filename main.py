@@ -51,7 +51,7 @@ def handle_message(event):
     print("user id: ", event.source.user_id)
     if event.message.text == "ヤフーニュース":
         print("ヤフーニュースモード")
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Yニュースからなだ、待っとけ"))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="Yニュースからだな、待っとけ"))
         article_dict = get_yahoonews_ranking()
         if article_dict:
             send_articles(article_dict=article_dict, event=event)
@@ -59,7 +59,7 @@ def handle_message(event):
             line_bot_api.push_message(to=event.source.user_id, messages=TextSendMessage(text='なんかエラー出たわ'))
     elif event.message.text == "東洋経済オンライン":
         print("東洋経済オンラインモード")
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="東オンからなだ、待っとけ"))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="東オンからだな、待っとけ"))
         article_dict = get_toyoukeizai_ranking()
         if article_dict:
             send_articles(article_dict=article_dict, event=event)
@@ -67,7 +67,7 @@ def handle_message(event):
             line_bot_api.push_message(to=event.source.user_id, messages=TextSendMessage(text='ソーリー'))
     elif event.message.text == "NHK":
         print("NHKモード")
-        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="NHKからなだ、待っとけ"))
+        line_bot_api.reply_message(event.reply_token, TextSendMessage(text="NHKからだな、待っとけ"))
         article_dict = get_nhk_ranking()
         if article_dict:
             send_articles(article_dict=article_dict, event=event)
